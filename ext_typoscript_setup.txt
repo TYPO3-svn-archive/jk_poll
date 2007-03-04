@@ -1,0 +1,1 @@
+plugin.tx_jkpoll_pi1.rtefield_stdWrap.parseFunc < tt_content.text.20.parseFunc 

@@ -1,0 +1,211 @@
+<T3DataStructure>
+  <sheets>
+	<sDEF>
+	  <ROOT>
+		<TCEforms>
+			<sheetTitle>LLL:EXT:jk_poll/locallang_db.php:tt_content.pi_flexform.sheet_settings</sheetTitle>
+		</TCEforms>
+	    <type>array</type>
+	    <el>
+	      <what_to_display>
+			  <TCEforms>
+				<label>LLL:EXT:jk_poll/locallang_db.php:tt_content.pi_flexform.what_to_display</label>
+				<config>
+					<type>select</type>
+					<items type="array">
+					<numIndex index="0" type="array">
+						<numIndex index="0">POLL</numIndex>
+						<numIndex index="1">POLL</numIndex>
+					</numIndex>
+					<numIndex index="1" type="array">
+						<numIndex index="0">LIST</numIndex>
+						<numIndex index="1">LIST</numIndex>
+					</numIndex>
+					<numIndex index="2" type="array">
+						<numIndex index="0">RESULT</numIndex>
+						<numIndex index="1">RESULT</numIndex>
+					</numIndex>
+					</items>
+					<maxitems>2</maxitems>
+					<size>5</size>
+					<multiple>1</multiple>
+					<selectedListStyle>width:150px</selectedListStyle>
+					<itemListStyle>width:150px</itemListStyle>
+				</config>
+			  </TCEforms>
+		    </what_to_display>
+		    <amount>
+			<TCEforms>
+				<label>LLL:EXT:jk_poll/locallang_db.php:tt_content.pi_flexform.amount</label>
+				<config>
+					<type>input</type>
+					<size>5</size>
+				</config>
+			</TCEforms>
+	        </amount>
+	        <show_first>
+			<TCEforms>
+				<label>LLL:EXT:jk_poll/locallang_db.php:tt_content.pi_flexform.show_first</label>
+				<config>
+					<type>check</type>
+				</config>
+			</TCEforms>
+	        </show_first>
+	        <vote_old>
+			<TCEforms>
+				<label>LLL:EXT:jk_poll/locallang_db.php:tt_content.pi_flexform.vote_old</label>
+				<config>
+					<type>check</type>
+				</config>
+			</TCEforms>
+	        </vote_old>
+	        <cookie>
+			<TCEforms>
+				<label>LLL:EXT:jk_poll/locallang_db.php:tt_content.pi_flexform.cookie</label>
+				<config>
+					<type>input</type>
+					<size>5</size>
+				</config>
+			</TCEforms>
+	        </cookie>
+	        <fe_user>
+			<TCEforms>
+				<label>LLL:EXT:jk_poll/locallang_db.php:tt_content.pi_flexform.fe_user</label>
+				<config>
+					<type>check</type>
+				</config>
+			</TCEforms>
+	        </fe_user>
+	        <check_ip>
+			<TCEforms>
+				<label>LLL:EXT:jk_poll/locallang_db.php:tt_content.pi_flexform.check_ip</label>
+				<config>
+					<type>check</type>
+				</config>
+			</TCEforms>
+	        </check_ip>
+	        <time>
+			<TCEforms>
+				<label>LLL:EXT:jk_poll/locallang_db.php:tt_content.pi_flexform.time</label>
+				<config>
+					<type>input</type>
+					<size>5</size>
+				</config>
+			</TCEforms>
+	        </time>
+	        <captcha>
+			<TCEforms>
+				<label>LLL:EXT:jk_poll/locallang_db.php:tt_content.pi_flexform.captcha</label>
+				<config>
+					<type>check</type>
+				</config>
+			</TCEforms>
+	        </captcha>
+		  </el>
+		</ROOT>
+	</sDEF>
+	
+	<s_template>
+	  <ROOT>
+	    <TCEforms>
+			<sheetTitle>LLL:EXT:jk_poll/locallang_db.php:tt_content.pi_flexform.sheet_template</sheetTitle>
+		</TCEforms>
+	    <type>array</type>
+	    <el>
+	      <PIDitemDisplay>
+		  	<TCEforms>
+			<exclude>1</exclude>
+			<label>LLL:EXT:jk_poll/locallang_db.php:tt_content.pi_flexform.PIDitemDisplay</label>
+			<config>
+				<type>group</type>
+				<internal_type>db</internal_type>
+				<allowed>pages</allowed>
+				<size>1</size>
+				<maxitems>1</maxitems>
+				<minitems>0</minitems>
+				<show_thumbs>1</show_thumbs>
+			</config>
+		  	</TCEforms>
+		  </PIDitemDisplay>	    
+	      <type>
+			<TCEforms>
+				<label>LLL:EXT:jk_poll/locallang_db.php:tt_content.pi_flexform.type</label>
+				<config>
+					<type>select</type>
+					<items type="array">
+					<numIndex index="0" type="array">
+					<numIndex index="0">LLL:EXT:jk_poll/locallang_db.php:tt_content.pi_flexform.type_horizontal</numIndex>
+					<numIndex index="1">0</numIndex>
+					</numIndex>
+					<numIndex index="1" type="array">
+					<numIndex index="0">LLL:EXT:jk_poll/locallang_db.php:tt_content.pi_flexform.type_vertical</numIndex>
+					<numIndex index="1">1</numIndex>
+					</numIndex>
+					</items>
+				</config>
+			</TCEforms>
+	      </type>
+	      <templatefile>
+			<TCEforms>
+				<label>LLL:EXT:jk_poll/locallang_db.php:tt_content.pi_flexform.templatefile</label>
+				<config>
+					<type>input</type>
+					<size>25</size>
+				</config>
+			</TCEforms>
+	      </templatefile>
+	      <color>
+			<TCEforms>
+				<label>LLL:EXT:jk_poll/locallang_db.php:tt_content.pi_flexform.color</label>
+				<config>
+					<type>input</type>
+					<size>15</size>
+				</config>
+			</TCEforms>
+		  </color>
+	      <height_width>
+			<TCEforms>
+				<label>LLL:EXT:jk_poll/locallang_db.php:tt_content.pi_flexform.height_width</label>
+				<config>
+					<type>input</type>
+					<size>5</size>
+				</config>
+			</TCEforms>
+	      </height_width>
+	      <factor>
+			<TCEforms>
+				<label>LLL:EXT:jk_poll/locallang_db.php:tt_content.pi_flexform.factor</label>
+				<config>
+					<type>input</type>
+					<size>5</size>
+				</config>
+			</TCEforms>
+	      </factor>
+	      <list>
+			<TCEforms>
+				<label>LLL:EXT:jk_poll/locallang_db.php:tt_content.pi_flexform.list</label>
+				<config>
+					<type>check</type>
+				</config>
+			</TCEforms>
+	      </list>
+	      <PIDforward>
+		  	<TCEforms>
+			<exclude>1</exclude>
+			<label>LLL:EXT:jk_poll/locallang_db.php:tt_content.pi_flexform.PIDforward</label>
+			<config>
+				<type>group</type>
+				<internal_type>db</internal_type>
+				<allowed>pages</allowed>
+				<size>1</size>
+				<maxitems>1</maxitems>
+				<minitems>0</minitems>
+				<show_thumbs>1</show_thumbs>
+			</config>
+		  	</TCEforms>
+		  </PIDforward>
+	    </el>
+	  </ROOT>
+    </s_template>
+  </sheets>
+</T3DataStructure>
