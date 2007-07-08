@@ -46,7 +46,9 @@ class tx_jkpoll_pi1 extends tslib_pibase {
 		
 		//Get translated text labels from locallang
 		$this->LL_no_poll_found = $this->pi_getLL('no_poll_found');
+		$this->LL_poll_not_visible = $this->pi_getLL('poll_not_visible');
 		$this->LL_votes_total = $this->pi_getLL('votes_total');
+		$this->LL_votes_label = $this->pi_getLL('votes_label');
 		$this->LL_submit_button = $this->pi_getLL('submit_button');
 		$this->LL_linklist = $this->pi_getLL('linklist');
 		$this->LL_has_voted = $this->pi_getLL('has_voted');
@@ -255,101 +257,105 @@ class tx_jkpoll_pi1 extends tslib_pibase {
 	*********************************************************************/	
 	function showresults() {
         //Find any poll records on the current page
+		$now = time();
 		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('*', 'tx_jkpoll_poll
-		', 'uid=' .$this->pollID);
-		
-		//Get poll data
-		$row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res);
-
-		//Extract the answers and no. of votes
-		
-		$answers = explode("\n", $row['answers']);
-		$total = 0;
-		foreach ($answers as $a) {
-			list($votes, $answertext) = explode('|', $a);
-			$total += $votes;
-		} 
-		
-		//Get type of poll
-		if ($this->conf['type'])
-		    $type = $this->conf['type'];
-		else
-		    $type = $this->pi_getFFvalue($this->cObj->data['pi_flexform'],'type','s_template');
-		//Get height_width
-		$height_width = $this->pi_getFFvalue($this->cObj->data['pi_flexform'],'height_width','s_template');
-		if ($height_width == "" && $type == 0)
-			$height_width = 10;
-		elseif ($height_width == "" && $type == 1)
-			$height_width = 50;
-		//Get factor
-		$factor = $this->pi_getFFvalue($this->cObj->data['pi_flexform'],'factor','s_template');
-		if ($factor == "")
-			$factor = 1;
-		
-		$template = array();
-    		$template['poll_header'] = $this->cObj->getSubpart($this->templateCode,"###POLL_HEADER###"); 
-    		if ($type == 0) 
-        	    $template['answers'] = $this->cObj->getSubpart($this->templateCode,"###POLL_ANSWER_HORIZONTAL###"); 
-    		else
-        	    $template['answers'] = $this->cObj->getSubpart($this->templateCode,"###POLL_ANSWER_VERTICAL###"); 
-    		$template['answer_data'] = $this->cObj->getSubpart($template['answers'],"###ANSWER_RESULT###"); 
-		
-    		$markerArrayQuestion = array();
-		$markerArrayQuestion["###TITLE###"] = $row['title'];
-		$markerArrayQuestion["###QUESTION_IMAGE###"] = $this->getimage();
-		$markerArrayQuestion["###QUESTIONTEXT###"] = $this->cObj->stdWrap($row['question'],$this->conf['rtefield_stdWrap.']);
-		$content = $this->cObj->substituteMarkerArrayCached($template['poll_header'],$markerArrayQuestion,$subpartArray,$wrappedSubpartArray);
-		
-		$markerArray["###VOTES###"] = $total;
-		$template['answers'] = $this->cObj->substituteMarkerArrayCached($template['answers'],$markerArray,$subpartArray,$wrappedSubpartArray);;
-		
-		//Get highest result
-		$i=0;
-		foreach ($answers as $a) {
-			list($votes, $answertext, $color) = explode('|', $a);
-			if ($total > 0) {
-				$percent = round(($votes / $total)*100,1);
-			} else {
-				$percent = 0;
-			}
-			$percents[++$i]=$percent;
-		}
-		$max=max($percents);
-			
-		foreach ($answers as $a) {
-			list($votes, $answertext, $color) = explode('|', $a);
-			if (trim($color) == "")
-				if ($this->conf['color'] != '')
-					$color = $this->conf['color'];
-				elseif ($this->pi_getFFvalue($this->cObj->data['pi_flexform'],'color','s_template') != '')
-					$color = $this->pi_getFFvalue($this->cObj->data['pi_flexform'],'color','s_template');
-				else
-					$color="blue";
-			if ($total > 0) {
-				$percent = round(($votes / $total)*100,1);
-			} else {
-				$percent = 0;
-			}				
-			
-			//Make result bars
-			$markerArrayAnswer = array();
-			if ($type == 0) 
-				$markerArrayAnswer["###IMG_PERCENTAGE_RESULT###"] = '<img src="'.t3lib_extMgm::siteRelPath($this->extKey).'images/'.trim($color).'.gif" width="'.$percent*$factor.'" height="'.$height_width.'" alt="'.$percent.'%" />';
-				//horizontal
-//				$markerArrayAnswer["###IMG_PERCENTAGE_RESULT###"] = '<div style="float:left; background-color:'.trim($color).'; width:'.$percent*$factor.'px; height:'.$height_width.'px;" title="'.$percent.'%"></div>';
-			else 
-				$markerArrayAnswer["###IMG_PERCENTAGE_RESULT###"] = '<img src="'.t3lib_extMgm::siteRelPath($this->extKey).'pi1/clear.gif" width="'.$height_width.'" height="'.(($max*$factor)-($percent*$factor)).'" alt="" /><br /><img src="'.t3lib_extMgm::siteRelPath($this->extKey).'images/'.trim($color).'.gif" width="'.$height_width.'" height="'.$percent*$factor.'" alt="'.$percent.'%" />';
-				// vertical
-//				$markerArrayAnswer["###IMG_PERCENTAGE_RESULT###"] = '<div style="position:absolute; height:'.(100*$factor).'px; width:'.$height_width.'px;"><div style="position:absolute; bottom:0px; background-color:'.trim($color).'; width:'.$height_width.'px; height:'.$percent*$factor.'px;" alt="'.$percent.'%"></div></div>';
-			$markerArrayAnswer["###PERCENTAGE_RESULT###"] = $percent." %";
-			$markerArrayAnswer["###ANSWERTEXT_RESULT###"] = $answertext;
-			$markerArrayAnswer["###AMOUNT_VOTES###"] = $votes;
-			$resultcontentAnswer .= $this->cObj->substituteMarkerArrayCached($template['answer_data'],$markerArrayAnswer,$subpartArray,$wrappedSubpartArray);
-		}
+		', 'uid=' .$this->pollID.' AND deleted=0 AND (('.$now.' BETWEEN starttime AND endtime) OR (starttime=0 AND endtime=0)) AND hidden=0');
 	
-		$subpartArray["###ANSWER_RESULT###"] = $resultcontentAnswer;
-    		$content .= $this->cObj->substituteMarkerArrayCached($template["answers"], array(), $subpartArray, array());
-    		return $content;
+		//Get poll data
+		if ($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
+
+			//Extract the answers and no. of votes		
+			$answers = explode("\n", $row['answers']);
+			$total = 0;
+			foreach ($answers as $a) {
+				list($votes, $answertext) = explode('|', $a);
+				$total += $votes;
+			} 
+			
+			//Get type of poll
+			if ($this->conf['type'])
+			    $type = $this->conf['type'];
+			else
+			    $type = $this->pi_getFFvalue($this->cObj->data['pi_flexform'],'type','s_template');
+			//Get height_width
+			$height_width = $this->pi_getFFvalue($this->cObj->data['pi_flexform'],'height_width','s_template');
+			if ($height_width == "" && $type == 0)
+				$height_width = 10;
+			elseif ($height_width == "" && $type == 1)
+				$height_width = 50;
+			//Get factor
+			$factor = $this->pi_getFFvalue($this->cObj->data['pi_flexform'],'factor','s_template');
+			if ($factor == "")
+				$factor = 1;
+			
+			$template = array();
+	    		$template['poll_header'] = $this->cObj->getSubpart($this->templateCode,"###POLL_HEADER###"); 
+	    		if ($type == 0) 
+	        	    $template['answers'] = $this->cObj->getSubpart($this->templateCode,"###POLL_ANSWER_HORIZONTAL###"); 
+	    		else
+	        	    $template['answers'] = $this->cObj->getSubpart($this->templateCode,"###POLL_ANSWER_VERTICAL###"); 
+	    		$template['answer_data'] = $this->cObj->getSubpart($template['answers'],"###ANSWER_RESULT###"); 
+			
+	    		$markerArrayQuestion = array();
+			$markerArrayQuestion["###TITLE###"] = $row['title'];
+			$markerArrayQuestion["###QUESTION_IMAGE###"] = $this->getimage();
+			$markerArrayQuestion["###QUESTIONTEXT###"] = $this->cObj->stdWrap($row['question'],$this->conf['rtefield_stdWrap.']);
+			$content = $this->cObj->substituteMarkerArrayCached($template['poll_header'],$markerArrayQuestion,$subpartArray,$wrappedSubpartArray);
+			
+			$markerArray["###VOTES_LABEL###"] = $this->LL_votes_label;
+			$markerArray["###VOTES###"] = $total;
+			$template['answers'] = $this->cObj->substituteMarkerArrayCached($template['answers'],$markerArray,$subpartArray,$wrappedSubpartArray);;
+			
+			//Get highest result
+			$i=0;
+			foreach ($answers as $a) {
+				list($votes, $answertext, $color) = explode('|', $a);
+				if ($total > 0) {
+					$percent = round(($votes / $total)*100,1);
+				} else {
+					$percent = 0;
+				}
+				$percents[++$i]=$percent;
+			}
+			$max=max($percents);
+				
+			foreach ($answers as $a) {
+				list($votes, $answertext, $color) = explode('|', $a);
+				if (trim($color) == "")
+					if ($this->conf['color'] != '')
+						$color = $this->conf['color'];
+					elseif ($this->pi_getFFvalue($this->cObj->data['pi_flexform'],'color','s_template') != '')
+						$color = $this->pi_getFFvalue($this->cObj->data['pi_flexform'],'color','s_template');
+					else
+						$color="blue";
+				if ($total > 0) {
+					$percent = round(($votes / $total)*100,1);
+				} else {
+					$percent = 0;
+				}				
+				
+				//Make result bars
+				$markerArrayAnswer = array();
+				if ($type == 0) 
+					$markerArrayAnswer["###IMG_PERCENTAGE_RESULT###"] = '<img src="'.t3lib_extMgm::siteRelPath($this->extKey).'images/'.trim($color).'.gif" width="'.$percent*$factor.'" height="'.$height_width.'" alt="'.$percent.'%" />';
+					//horizontal
+	//				$markerArrayAnswer["###IMG_PERCENTAGE_RESULT###"] = '<div style="float:left; background-color:'.trim($color).'; width:'.$percent*$factor.'px; height:'.$height_width.'px;" title="'.$percent.'%"></div>';
+				else 
+					$markerArrayAnswer["###IMG_PERCENTAGE_RESULT###"] = '<img src="'.t3lib_extMgm::siteRelPath($this->extKey).'pi1/clear.gif" width="'.$height_width.'" height="'.(($max*$factor)-($percent*$factor)).'" alt="" /><br /><img src="'.t3lib_extMgm::siteRelPath($this->extKey).'images/'.trim($color).'.gif" width="'.$height_width.'" height="'.$percent*$factor.'" alt="'.$percent.'%" />';
+					// vertical
+	//				$markerArrayAnswer["###IMG_PERCENTAGE_RESULT###"] = '<div style="position:absolute; height:'.(100*$factor).'px; width:'.$height_width.'px;"><div style="position:absolute; bottom:0px; background-color:'.trim($color).'; width:'.$height_width.'px; height:'.$percent*$factor.'px;" alt="'.$percent.'%"></div></div>';
+				$markerArrayAnswer["###PERCENTAGE_RESULT###"] = $percent." %";
+				$markerArrayAnswer["###ANSWERTEXT_RESULT###"] = $answertext;
+				$markerArrayAnswer["###AMOUNT_VOTES###"] = $votes;
+				$resultcontentAnswer .= $this->cObj->substituteMarkerArrayCached($template['answer_data'],$markerArrayAnswer,$subpartArray,$wrappedSubpartArray);
+			}
+		
+			$subpartArray["###ANSWER_RESULT###"] = $resultcontentAnswer;
+	    		$content .= $this->cObj->substituteMarkerArrayCached($template["answers"], array(), $subpartArray, array());
+	    		return $content;
+		}
+	    else
+	    	return '<div class="error">' .$this->LL_poll_not_visible. '</div>';
 	}
 
 	/********************************************************************
@@ -481,12 +487,12 @@ class tx_jkpoll_pi1 extends tslib_pibase {
 		
 		//Show the poll results or forward to page specified
 		if ($this->conf['PIDforward'])
-			header('Location:'.t3lib_div::locationHeaderUrl($this->pi_getPageLink($this->pi_getFFvalue($this->cObj->data['pi_flexform'],'PIDforward','s_template'))));
+			header('Location:'.t3lib_div::locationHeaderUrl($this->conf['PIDforward']));
 		elseif ($this->pi_getFFvalue($this->cObj->data['pi_flexform'],'PIDforward','s_template'))
-			header('Location:'.t3lib_div::locationHeaderUrl($this->pi_getPageLink($this->conf['PIDforward'])));
+			header('Location:'.t3lib_div::locationHeaderUrl($this->pi_getPageLink($this->pi_getFFvalue($this->cObj->data['pi_flexform'],'PIDforward','s_template'))));
 		else 
 			$content = $this->showresults();
-				
+
 		return $content;
 		
 	}
