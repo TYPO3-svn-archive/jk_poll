@@ -49,6 +49,7 @@ class tx_jkpoll_pi1 extends tslib_pibase {
 		$this->LL_poll_not_visible = $this->pi_getLL('poll_not_visible');
 		$this->LL_votes_total = $this->pi_getLL('votes_total');
 		$this->LL_votes_label = $this->pi_getLL('votes_label');
+		$this->LL_amount_votes_label = $this->pi_getLL('amount_votes_label');
 		$this->LL_submit_button = $this->pi_getLL('submit_button');
 		$this->LL_linklist = $this->pi_getLL('linklist');
 		$this->LL_has_voted = $this->pi_getLL('has_voted');
@@ -347,6 +348,10 @@ class tx_jkpoll_pi1 extends tslib_pibase {
 				$markerArrayAnswer["###PERCENTAGE_RESULT###"] = $percent." %";
 				$markerArrayAnswer["###ANSWERTEXT_RESULT###"] = $answertext;
 				$markerArrayAnswer["###AMOUNT_VOTES###"] = $votes;
+				if ($this->LL_amount_votes_label != '')
+					$markerArrayAnswer["###AMOUNT_VOTES_LABEL###"] = $this->LL_amount_votes_label;
+				else
+					$markerArrayAnswer["###AMOUNT_VOTES_LABEL###"] = $this->LL_votes_label;
 				$resultcontentAnswer .= $this->cObj->substituteMarkerArrayCached($template['answer_data'],$markerArrayAnswer,$subpartArray,$wrappedSubpartArray);
 			}
 		
