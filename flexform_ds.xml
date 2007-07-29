@@ -181,6 +181,14 @@
 				</config>
 			</TCEforms>
 	      </factor>
+	      <first_answer_selected>
+			<TCEforms>
+				<label>LLL:EXT:jk_poll/locallang_db.php:tx_jkpoll_poll.first_answer_selected</label>
+				<config>
+					<type>check</type>
+				</config>
+			</TCEforms>
+	      </first_answer_selected>
 	      <list>
 			<TCEforms>
 				<label>LLL:EXT:jk_poll/locallang_db.php:tt_content.pi_flexform.list</label>
@@ -207,5 +215,31 @@
 	    </el>
 	  </ROOT>
     </s_template>
+	<language>
+	  <ROOT>
+	    <TCEforms>
+			<sheetTitle>LLL:EXT:jk_poll/locallang_db.php:tt_content.pi_flexform.sheet_language</sheetTitle>
+		</TCEforms>
+	    <type>array</type>
+	    <el>	     
+	      <vote_language_specific>
+			<TCEforms>
+				<label>LLL:EXT:jk_poll/locallang_db.php:tx_jkpoll_poll.vote_language_specific</label>
+				<config>
+					<type>check</type>
+				</config>
+			</TCEforms>
+	      </vote_language_specific>
+	      <check_language_specific>
+			<TCEforms>
+				<label>LLL:EXT:jk_poll/locallang_db.php:tx_jkpoll_poll.check_language_specific</label>
+				<config>
+					<type>check</type>
+				</config>
+			</TCEforms>
+	      </check_language_specific>
+	    </el>
+	  </ROOT>
+	</language>
   </sheets>
 </T3DataStructure>

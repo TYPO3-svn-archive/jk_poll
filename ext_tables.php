@@ -20,9 +20,17 @@ $TCA["tx_jkpoll_poll"] = Array (
 		),
 		"dynamicConfigFile" => t3lib_extMgm::extPath($_EXTKEY)."tca.php",
 		"iconfile" => t3lib_extMgm::extRelPath($_EXTKEY)."icon_tx_jkpoll_poll.gif",
+		
+		"prependAtCopy" => "LLL:EXT:lang/locallang_general.php:LGL.prependAtCopy",
+		"copyAfterDuplFields" => "sys_language_uid",
+		"useColumnsForDefaultValues" => "sys_language_uid",
+		"transOrigPointerField" => "l18n_parent",
+		"transOrigDiffSourceField" => "l18n_diffsource",
+		"languageField" => "sys_language_uid",
+
 	),
 	"feInterface" => Array (
-		"fe_admin_fieldList" => "hidden, starttime, endtime, fe_group, title, image, question, answers, valid_till",
+		"fe_admin_fieldList" => "hidden, starttime, endtime, fe_group, title, image, question, votes, answers, colors, valid_till",
 	)
 );
 

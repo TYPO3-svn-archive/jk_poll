@@ -16,14 +16,20 @@ CREATE TABLE tx_jkpoll_poll (
 	title tinytext NOT NULL,
 	image blob NOT NULL,
 	question text NOT NULL,
+	votes text NOT NULL,
 	answers text NOT NULL,
+	colors text NOT NULL,	
 	valid_till int(11) DEFAULT '0' NOT NULL,
 	title_tag text NOT NULL,
     alternative_tag text NOT NULL,
     width int(11) DEFAULT '0' NOT NULL,
     height int(11) DEFAULT '0' NOT NULL,
     link tinytext NOT NULL,
-    clickenlarge tinyint(3) DEFAULT '0' NOT NULL
+    clickenlarge tinyint(3) DEFAULT '0' NOT NULL,
+
+	sys_language_uid int(11) DEFAULT '0' NOT NULL,
+	l18n_parent int(11) DEFAULT '0' NOT NULL,
+	l18n_diffsource mediumblob NOT NULL,
 	
 	PRIMARY KEY (uid),
 	KEY parent (pid)
